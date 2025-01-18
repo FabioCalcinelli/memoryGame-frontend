@@ -1,12 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Field } from "./Field/Field.tsx";
+import './App.css';
+
+const NUM_CARDS = 40
+const TITLE = "Memory Game"
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return ("Hello World")
+    return (
+        <div className="container">
+            <h1 className="title">{TITLE}</h1>
+            <Field numCards={NUM_CARDS} className="field" />
+        </div>
+    )
 }
 
 export default App
