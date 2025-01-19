@@ -7,3 +7,14 @@
     justify-content: center;
     align-items: center;
 }
+
+.CardFound {
+    width: 100px;
+    height: 142px;
+    border: 1px green solid;
+    opacity: 0.8;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
