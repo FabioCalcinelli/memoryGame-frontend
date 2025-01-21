@@ -29,17 +29,18 @@ export function Field({numCards, className, ...divProps}: FieldProps) {
 function updateField(cardIndex: number, flipped: boolean[], found: boolean[],
                      setFound: Dispatch<SetStateAction<boolean[]>>, arrayOfCardNumbers: number[]) : boolean[] {
     let newFlipped: boolean[] = [...flipped]
-    const numberOfFlipped: number = flipped.length
+    let flippedNotFound: boolean[] = flipped.map((val, index) => val && !found[index])
+    const numberOfFlippedNotFound: number = flippedNotFound.filter((value) => value).length
     const cardIsCovered: boolean = !flipped[cardIndex]
     if (cardIsCovered) {
-        const thirdCardClicked: boolean = numberOfFlipped % 2 == 0 && numberOfFlipped !== 0
+        const thirdCardClicked: boolean = numberOfFlippedNotFound % 2 == 0 && numberOfFlippedNotFound !== 0
         if (thirdCardClicked) {
-            newFlipped = unFlipBothCards(flipped, flipped, found)
+            newFlipped = unFlipBothCards(flipped, newFlipped, found)
         } else {
-            const pairFound: boolean = arrayOfCardNumbers[cardIndex] == arrayOfCardNumbers[flipped.indexOf(true)]
+            newFlipped[cardIndex] = true
+            const pairFound: boolean = arrayOfCardNumbers[cardIndex] == arrayOfCardNumbers[flippedNotFound.indexOf(true)]
             if (pairFound) {
-                newFlipped[cardIndex] = true
-                addPairToFound(newFlipped, cardIndex, flipped, setFound)
+                addPairToFound(newFlipped, cardIndex, flippedNotFound, setFound)
             }
         }
     }
@@ -52,14 +53,14 @@ function unFlipBothCards(flipped: boolean[], newFlipped: boolean[], found: boole
     indexesToUnflip.forEach((x) => {
         newFlipped[x] = false
     })
-    return flipped
+    return newFlipped
 }
 
-function addPairToFound(newFlipped: boolean[], cardIndex: number, flipped: boolean[], setFound: Dispatch<SetStateAction<boolean[]>>) {
+function addPairToFound(newFlipped: boolean[], cardIndex: number, flippedNotFound: boolean[], setFound: Dispatch<SetStateAction<boolean[]>>) {
     setFound((oldFoundState: boolean[]): boolean[] => {
         const newFoundState: boolean[] = [...oldFoundState]
         newFoundState[cardIndex] = true;
-        newFoundState[flipped.indexOf(true)] = true;
+        newFoundState[flippedNotFound.indexOf(true)] = true;
         return newFoundState
     })
 }
