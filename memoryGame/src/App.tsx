@@ -14,7 +14,7 @@ function App() {
     return (
         <div className="container">
             <h1 className="title">{TITLE}</h1>
-            <Field numCards={NUM_CARDS} className="field" onMove={() => setMoves(moves+1)} resetMoves={() => setMoves(0)}/>
+            <Field numCards={NUM_CARDS} className="field" onMove={() => setMoves(moves+1)} resetMoves={() => setMoves(0)} moves={moves}/>
             <MovesCounter count={moves} className="moves-counter" />
         </div>
     )

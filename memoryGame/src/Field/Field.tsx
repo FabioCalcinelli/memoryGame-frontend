@@ -7,10 +7,11 @@ interface FieldProps extends HTMLAttributes<HTMLDivElement> {
     numCards: number,
     onMove: () => void,
     resetMoves?: () => void
+    moves: number
 }
 
 
-export function Field({numCards, className, onMove, resetMoves, ...divProps}: FieldProps) {
+export function Field({numCards, className, onMove, resetMoves, moves, ...divProps}: FieldProps) {
     const [flipped, setFlipped] = useState<boolean[]>(new Array(numCards).fill(false))
     const [found, setFound] = useState<boolean[]>(new Array(numCards).fill(false))
     const [gameOver, setGameOver] = useState(false);
@@ -34,7 +35,7 @@ export function Field({numCards, className, onMove, resetMoves, ...divProps}: Fi
         setFlipped(new Array(numCards).fill(false));
         setFound(new Array(numCards).fill(false));
         setGameOver(false);
-        resetMoves();
+        resetMoves?.();
         setPlayAgain(!playAgain);
     }
 
@@ -42,7 +43,7 @@ export function Field({numCards, className, onMove, resetMoves, ...divProps}: Fi
         <div className={className} style={divProps.style}>
             {arrayOfCardNumbers.map((i, j) => <Card key={j} number={i} flipped={flipped[j]} found={found[j]}
                                                     onCardClicked={handleCardClick(j)}/>)}
-            {gameOver && GameOver({onPlayAgain, moves: 10})}
+            {gameOver && GameOver({onPlayAgain, moves: moves})}
         </div>
     );
 }
