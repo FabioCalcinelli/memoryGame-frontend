@@ -5,19 +5,21 @@ import {GameOver} from "../GameOverWindow/GameOverWindow.tsx";
 
 interface FieldProps extends HTMLAttributes<HTMLDivElement> {
     numCards: number,
-    onMove: () => void
+    onMove: () => void,
+    resetMoves?: () => void
 }
 
 
-export function Field({numCards, className,  onMove, ...divProps}: FieldProps) {
+export function Field({numCards, className, onMove, resetMoves, ...divProps}: FieldProps) {
     const [flipped, setFlipped] = useState<boolean[]>(new Array(numCards).fill(false))
     const [found, setFound] = useState<boolean[]>(new Array(numCards).fill(false))
     const [gameOver, setGameOver] = useState(false);
-    const arrayOfCardNumbers = useMemo(() => generateRandomPairs(numCards / 2), []);
+    const [playAgain, setPlayAgain] = useState(false);
+    const arrayOfCardNumbers = useMemo(() => generateRandomPairs(numCards / 2), [playAgain]);
     const handleCardClick = (cardIndex: number) => {
         return () => setFlipped(
             (currentState: boolean[]): boolean[] => {
-                return updateField(cardIndex, currentState, found, setFound, arrayOfCardNumbers, onMove, setGameOver)
+                return updateField(cardIndex, currentState, found, setFound, arrayOfCardNumbers, onMove)
             }
         )
     }
@@ -29,6 +31,11 @@ export function Field({numCards, className,  onMove, ...divProps}: FieldProps) {
     }, [found])
 
     function onPlayAgain() {
+        setFlipped(new Array(numCards).fill(false));
+        setFound(new Array(numCards).fill(false));
+        setGameOver(false);
+        resetMoves();
+        setPlayAgain(!playAgain);
     }
 
     return (
@@ -41,7 +48,7 @@ export function Field({numCards, className,  onMove, ...divProps}: FieldProps) {
 }
 
 function updateField(cardIndex: number, flipped: boolean[], found: boolean[],
-                     setFound: Dispatch<SetStateAction<boolean[]>>, arrayOfCardNumbers: number[], onMove:(() => void) | undefined, setGameOver): boolean[] {
+                     setFound: Dispatch<SetStateAction<boolean[]>>, arrayOfCardNumbers: number[], onMove: (() => void) | undefined): boolean[] {
     let newFlipped: boolean[] = [...flipped]
     let flippedNotFound: boolean[] = flipped.map((val, index) => val && !found[index])
     const numberOfFlippedNotFound: number = flippedNotFound.filter((value) => value).length
@@ -60,7 +67,7 @@ function updateField(cardIndex: number, flipped: boolean[], found: boolean[],
         }
     }
 
-    const flippedLength: number = newFlipped.filter((val,_) => val).length;
+    const flippedLength: number = newFlipped.filter((val, _) => val).length;
     const moveCompleted: boolean = flippedLength > 0 && flippedLength % 2 == 0;
     if (moveCompleted) {
         onMove?.()
