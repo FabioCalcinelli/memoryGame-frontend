@@ -5,15 +5,11 @@ import {MovesCounter} from "./MovesCounter/MovesCounter.tsx";
 
 
 
-const NUM_CARDS = 40
+const NUM_CARDS = 4
 const TITLE = "Memory Game"
 
 function App() {
     const [moves, setMoves] = useState(0);
-
-    const handleMove = () => {
-        setMoves(moves + 1);
-    };
 
     return (
         <div className="container">

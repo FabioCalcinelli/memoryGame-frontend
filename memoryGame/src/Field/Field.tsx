@@ -1,5 +1,5 @@
 import Card from "../Card/Card.tsx"
-import {Dispatch, HTMLAttributes, SetStateAction, useMemo, useState} from "react";
+import {Dispatch, HTMLAttributes, SetStateAction, useEffect, useMemo, useState} from "react";
 import {generateRandomPairs} from "../helper/generateRandomPairs.tsx";
 import {GameOver} from "../GameOverWindow/GameOverWindow.tsx";
 
@@ -21,6 +21,12 @@ export function Field({numCards, className,  onMove, ...divProps}: FieldProps) {
             }
         )
     }
+    useEffect(() => {
+        const gameCompleted: boolean = found.every(val => val);
+        if (gameCompleted) {
+            setGameOver(true);
+        }
+    }, [found])
 
     function onPlayAgain() {
     }
@@ -59,8 +65,7 @@ function updateField(cardIndex: number, flipped: boolean[], found: boolean[],
     if (moveCompleted) {
         onMove?.()
     }
-    const gameCompleted: boolean = found.every(val => val);
-    setGameOver(gameCompleted)
+
     return newFlipped
 }
 
