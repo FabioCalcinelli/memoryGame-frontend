@@ -13,6 +13,5 @@ export function generateRandomPairs(n) {
         numbers1.splice(index1, 1);
         numbers2.splice(index2, 1);
     }
-    console.log(result);
     return result;
 }
