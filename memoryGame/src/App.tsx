@@ -5,7 +5,7 @@ import {MovesCounter} from "./MovesCounter/MovesCounter.tsx";
 
 
 
-const NUM_CARDS = 4
+const NUM_CARDS = 40
 const TITLE = "Memory Game"
 
 function App() {

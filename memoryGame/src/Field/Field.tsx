@@ -2,6 +2,7 @@ import Card from "../Card/Card.tsx"
 import {Dispatch, HTMLAttributes, SetStateAction, useEffect, useMemo, useState} from "react";
 import {generateRandomPairs} from "../helper/generateRandomPairs.tsx";
 import {GameOver} from "../GameOverWindow/GameOverWindow.tsx";
+import {useGenerateImages} from "../helper/generateImages.tsx";
 
 interface FieldProps extends HTMLAttributes<HTMLDivElement> {
     numCards: number,
@@ -16,7 +17,10 @@ export function Field({numCards, className, onMove, resetMoves, moves, ...divPro
     const [found, setFound] = useState<boolean[]>(new Array(numCards).fill(false))
     const [gameOver, setGameOver] = useState(false);
     const [playAgain, setPlayAgain] = useState(false);
-    const arrayOfCardNumbers = useMemo(() => generateRandomPairs(numCards / 2), [playAgain]);
+    const arrayOfCardNumbers = useMemo(() => generateRandomPairs(numCards / 2), [numCards, playAgain]);
+    const {arrayOfImages, loading} = useGenerateImages(numCards, playAgain);
+
+
     const handleCardClick = (cardIndex: number) => {
         return () => setFlipped(
             (currentState: boolean[]): boolean[] => {
@@ -39,10 +43,14 @@ export function Field({numCards, className, onMove, resetMoves, moves, ...divPro
         setPlayAgain(!playAgain);
     }
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className={className} style={divProps.style}>
             {arrayOfCardNumbers.map((i, j) => <Card key={j} number={i} flipped={flipped[j]} found={found[j]}
-                                                    onCardClicked={handleCardClick(j)}/>)}
+                                                    onCardClicked={handleCardClick(j)} image={arrayOfImages[i]}/>)}
             {gameOver && GameOver({onPlayAgain, moves: moves})}
         </div>
     );

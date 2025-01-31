@@ -16,21 +16,13 @@
     align-items: center;
 }
 
-.card-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
 .card-content.flipped {
     justify-content: space-between;
 }
 
 .card-content img {
     width: 100%;
-    height: 100%;
+    height: 90%;
     object-fit: cover;
 }
 
