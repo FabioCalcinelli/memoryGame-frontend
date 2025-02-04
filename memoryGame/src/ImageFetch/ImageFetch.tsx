@@ -13,7 +13,6 @@ export const fetchCatUrl = async (): Promise<string | null> => {
             return null;
         }
         const jsonResponse = await rawResponse.json();
-        console.log(catProviderUrl + '/cat/' + jsonResponse._id);
         return catProviderUrl + '/cat/' + jsonResponse._id;
     } catch (error) {
         console.error('Error fetching cat URL:', error);
