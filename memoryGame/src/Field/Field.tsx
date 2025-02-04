@@ -8,18 +8,19 @@ interface FieldProps extends HTMLAttributes<HTMLDivElement> {
     numCards: number,
     onMove: () => void,
     resetMoves?: () => void
-    moves: number
+    moves: number,
+    images: String[],
+    loading: boolean,
+    resetImages: () => void
 }
 
 
-export function Field({numCards, className, onMove, resetMoves, moves, ...divProps}: FieldProps) {
+export function Field({numCards, className, onMove, resetMoves, moves, images, loading, resetImages, ...divProps}: FieldProps) {
     const [flipped, setFlipped] = useState<boolean[]>(new Array(numCards).fill(false))
     const [found, setFound] = useState<boolean[]>(new Array(numCards).fill(false))
     const [gameOver, setGameOver] = useState(false);
     const [playAgain, setPlayAgain] = useState(false);
     const arrayOfCardNumbers = useMemo(() => generateRandomPairs(numCards / 2), [numCards, playAgain]);
-    const {arrayOfImages, loading} = useGenerateImages(numCards, playAgain);
-
 
     const handleCardClick = (cardIndex: number) => {
         return () => setFlipped(
@@ -40,6 +41,7 @@ export function Field({numCards, className, onMove, resetMoves, moves, ...divPro
         setFound(new Array(numCards).fill(false));
         setGameOver(false);
         resetMoves?.();
+        resetImages();
         setPlayAgain(!playAgain);
     }
 
@@ -50,7 +52,7 @@ export function Field({numCards, className, onMove, resetMoves, moves, ...divPro
     return (
         <div className={className} style={divProps.style}>
             {arrayOfCardNumbers.map((i, j) => <Card key={j} number={i} flipped={flipped[j]} found={found[j]}
-                                                    onCardClicked={handleCardClick(j)} image={arrayOfImages[i]}/>)}
+                                                    onCardClicked={handleCardClick(j)} image={images[i]}/>)}
             {gameOver && GameOver({onPlayAgain, moves: moves})}
         </div>
     );

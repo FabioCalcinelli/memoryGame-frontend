@@ -10,7 +10,7 @@ interface CardProps {
 }
 export default function Card({ number, flipped, onCardClicked, found, image }: CardProps) {
     const content = flipped ? number.toString() : "Memory";
-
+    console.log(image)
     return (
         <div className={`card ${flipped && found ? "card-found" : ""}`} onClick={onCardClicked}>
             <div className={`card-content ${flipped ? 'flipped' : ''}`}>

@@ -2,19 +2,24 @@ import {fetchCatUrl} from '../ImageFetch/ImageFetch.tsx'
 import {useEffect, useMemo, useState} from "react";
 
 export const useGenerateImages = (numCards: number, playAgain: boolean) => {
-    const [arrayOfImages, setArrayOfImages] = useState<string[]>([]);
+    let arrayOfImages : String[] = new Array(numCards).fill('')
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const generate = async () => {
-            const images = await generateImages(numCards / 2);
-            setArrayOfImages(images);
-            setLoading(false);
+            try {
+                arrayOfImages = await generateImages(numCards / 2);
+                setLoading(false);
+            } catch (err) {
+                setError(err);
+                setLoading(false);
+            }
         };
         generate();
-    }, [playAgain]);
+    }, [numCards, playAgain]);
 
-    return { arrayOfImages, loading };
+    return { arrayOfImages, loading, error };
 };
 
 export async function generateImages(numberOfImages: number): Promise<string[]> {
