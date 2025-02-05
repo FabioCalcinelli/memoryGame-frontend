@@ -79,7 +79,7 @@ function updateField(cardIndex: number, flipped: boolean[], found: boolean[],
     }
 
     const flippedLength: number = newFlipped.filter((val, _) => val).length;
-    const moveCompleted: boolean = flippedLength > 0 && flippedLength % 2 == 0;
+    const moveCompleted: boolean = flippedLength > 0 && flippedLength % 2 == 0  && !flipped[cardIndex];
     if (moveCompleted) {
         onMove?.()
     }
