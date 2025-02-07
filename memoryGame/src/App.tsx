@@ -4,6 +4,7 @@ import {MovesCounter} from "./components/MovesCounter/MovesCounter.tsx";
 import {useGenerateImages} from "./helper/generateImages.tsx";
 import {startGame, handleCardClick} from "./api/gameStateFetch.ts";
 import Card from "./components/Card/Card.tsx";
+import {GameOver} from "./components/GameOverWindow/GameOverWindow.tsx";
 
 
 const TITLE = "Memory Game"
@@ -14,10 +15,8 @@ function App() {
 
     useEffect(() => {
         startGame().then(gameState => setGameState(gameState));
-    }, []);
+    }, [playAgain]);
 
-
-    console.log("gameState", gameState);
     const {images, loading, error} = useGenerateImages(gameState ? gameState.flipped.length / 2 : 0, playAgain);
 
     if (!gameState || loading) {
@@ -42,10 +41,10 @@ function App() {
                                 found={gameState.found[j]}
                                 onCardClicked={() => handleCardClick(j).then(newGameState => {
                                     setGameState(newGameState);
-                                    setPlayAgain(!playAgain)
                                 })}
                                 image={images[i]}
                             />)}
+                        {gameState.game_over && <GameOver onPlayAgain={() => setPlayAgain(!playAgain)} moves={gameState.nr_of_moves} />}
                     </div>
                     <MovesCounter count={gameState.nr_of_moves} className="moves-counter"/>
                 </div>
