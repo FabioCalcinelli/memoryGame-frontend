@@ -1,4 +1,4 @@
-import {fetchCatUrl} from '../ImageFetch/ImageFetch.tsx'
+import {fetchCatUrl} from '../api/ImageFetch.ts'
 import {useEffect, useMemo, useState} from "react";
 
 export const useGenerateImages = (numCards: number, playAgain: boolean) => {

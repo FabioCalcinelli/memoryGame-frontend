@@ -1,8 +1,8 @@
-import { Field } from "./Field/Field.tsx";
 import './App.css';
-import {useState} from "react";
-import {MovesCounter} from "./MovesCounter/MovesCounter.tsx";
+import {useEffect, useState} from "react";
+import {MovesCounter} from "./components/MovesCounter/MovesCounter.tsx";
 import {useGenerateImages} from "./helper/generateImages.tsx";
+import {getGameData} from "./api/gameStateFetch.ts";
 
 
 
@@ -10,8 +10,14 @@ const NUM_CARDS = 40
 const TITLE = "Memory Game"
 
 function App() {
+    const [gameData, setGameData] = useState({})
     const [moves, setMoves] = useState(0);
     const [playAgain, setPlayAgain] = useState(false);
+
+    useEffect(() => {
+        getGameData().then(data=>setGameData(data));
+    })
+
     const { arrayOfImages, loading, error } = useGenerateImages(NUM_CARDS, playAgain);
 
     if (loading) {
