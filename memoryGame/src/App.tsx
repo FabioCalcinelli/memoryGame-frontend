@@ -47,7 +47,7 @@ function App() {
                                 image={images[i]}
                             />)}
                     </div>
-                    <MovesCounter count={gameState.nrOfMoves} className="moves-counter"/>
+                    <MovesCounter count={gameState.nr_of_moves} className="moves-counter"/>
                 </div>
             )
             }
