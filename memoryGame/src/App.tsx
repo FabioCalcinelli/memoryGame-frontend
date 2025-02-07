@@ -2,25 +2,25 @@ import './App.css';
 import {useEffect, useState} from "react";
 import {MovesCounter} from "./components/MovesCounter/MovesCounter.tsx";
 import {useGenerateImages} from "./helper/generateImages.tsx";
-import {getGameData} from "./api/gameStateFetch.ts";
+import {startGame, handleCardClick} from "./api/gameStateFetch.ts";
+import Card from "./components/Card/Card.tsx";
 
 
-
-const NUM_CARDS = 40
 const TITLE = "Memory Game"
 
 function App() {
-    const [gameData, setGameData] = useState({})
-    const [moves, setMoves] = useState(0);
+    const [gameState, setGameState] = useState(null);
     const [playAgain, setPlayAgain] = useState(false);
 
     useEffect(() => {
-        getGameData().then(data=>setGameData(data));
-    })
+        startGame().then(gameState => setGameState(gameState));
+    }, []);
 
-    const { arrayOfImages, loading, error } = useGenerateImages(NUM_CARDS, playAgain);
 
-    if (loading) {
+    console.log("gameState", gameState);
+    const {images, loading, error} = useGenerateImages(gameState ? gameState.flipped.length / 2 : 0, playAgain);
+
+    if (!gameState || loading) {
         return <div>Loading...</div>;
     }
 
@@ -30,11 +30,28 @@ function App() {
 
     return (
         <div className="container">
-            <h1 className="title">{TITLE}</h1>
-            <Field />
-            <MovesCounter count={moves} className="moves-counter" />
-        </div>
-    )
+            {gameState && (
+                <div>
+                    <h1 className="title">{TITLE}</h1>
+                    <div className="field">
+                        {gameState.card_numbers.map((i, j) =>
+                            <Card
+                                key={j}
+                                number={i}
+                                flipped={gameState.flipped[j]}
+                                found={gameState.found[j]}
+                                onCardClicked={() => handleCardClick(j).then(newGameState => {
+                                    setGameState(newGameState);
+                                    setPlayAgain(!playAgain)
+                                })}
+                                image={images[i]}
+                            />)}
+                    </div>
+                    <MovesCounter count={gameState.nrOfMoves} className="moves-counter"/>
+                </div>
+            )
+            }
+        < /div>)
 }
 
 export default App

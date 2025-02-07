@@ -30,3 +30,8 @@
     border: 2px solid #4CAF50;
     opacity: 0.8;
 }
+
+.card:not(.card-found):not(.card-static):hover {
+    background-color: #ccc; /* or any other color you prefer */
+    border-color: #ccc; /* optional, to change border color on hover */
+}
